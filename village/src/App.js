@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { Route, NavLink } from 'react-router-dom';
 
-import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
+
+import './App.css';
 
 const baseUrl = 'http://localhost:3333'
 
@@ -13,7 +15,7 @@ const emptySmurf = {
   height: '',
 }
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,9 +42,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {console.log('App.js says:', this.state.smurfs)}
-        <SmurfForm />
-        <Smurfs smurfs={this.state.smurfs} />
+        <nav>
+          <div className='navLinks'>
+          <NavLink exact to='/'> Meet the Village </NavLink>
+          <NavLink to='/smurf-form'> Smurf Maker 3000 </NavLink>
+          </div>
+        </nav>
+        <Route path='/smurf-form' render={props => (<SmurfForm  {...props} /> )} />
+        <Route exact path='/' render={props => (<Smurfs {...props} smurfs={this.state.smurfs} /> )}/>
       </div>
     );
   }
