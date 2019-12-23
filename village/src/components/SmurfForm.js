@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+import axios from 'axios';
 
-class SmurfForm extends Component {
+class SmurfForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,12 +14,20 @@ class SmurfForm extends Component {
   addSmurf = event => {
     event.preventDefault();
     // add code to create the smurf using the api
-
-    this.setState({
-      name: '',
-      age: '',
-      height: ''
-    });
+    axios
+    .post('http://localhost:3333/smurfs', this.state)
+    .then(result => {
+      this.setState({
+        smurfs: result.data,
+        name: '',
+        age: '',
+        height: '',
+      })
+      this.props.history.push('/');
+    })
+    .catch(error => {
+      console.log('SmurfForm.js says:', error)
+    })
   }
 
   handleInputChange = e => {
@@ -29,25 +38,10 @@ class SmurfForm extends Component {
     return (
       <div className="SmurfForm">
         <form onSubmit={this.addSmurf}>
-          <input
-            onChange={this.handleInputChange}
-            placeholder="name"
-            value={this.state.name}
-            name="name"
-          />
-          <input
-            onChange={this.handleInputChange}
-            placeholder="age"
-            value={this.state.age}
-            name="age"
-          />
-          <input
-            onChange={this.handleInputChange}
-            placeholder="height"
-            value={this.state.height}
-            name="height"
-          />
-          <button type="submit">Add to the village</button>
+          <input onChange={this.handleInputChange} placeholder="name" value={this.state.name} name="name" />
+          <input onChange={this.handleInputChange} placeholder="age" value={this.state.age} name="age" />
+          <input onChange={this.handleInputChange} placeholder="height" value={this.state.height} name="height" />
+          <button type="submit">Send request to the Smurf Maker 3000</button>
         </form>
       </div>
     );
